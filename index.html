@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUXE | Beauty Salon & Spa Lounge</title>
+
+    <!-- EXTERNAL CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- INTERNAL CSS -->
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --bg-main: #0f0d0e;
+            --bg-card: rgba(28, 24, 26, 0.85);
+            --accent-gold: #e0a96d;
+            --accent-gold-hover: #c89256;
+            --text-white: #faf8f5;
+            --text-muted: #b3a7a1;
+            --border-color: rgba(224, 169, 109, 0.25);
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: 
+                radial-gradient(circle at 50% 0%, #251a1e 0%, #0f0d0e 65%),
+                radial-gradient(rgba(224, 169, 109, 0.04) 1px, transparent 1px);
+            background-size: 100% 100%, 30px 30px;
+            background-attachment: fixed;
+            color: var(--text-white);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -150px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 700px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(224, 169, 109, 0.12) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        /* NAVBAR LAYOUT */
+        header.navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 8%;
+            background: rgba(15, 13, 14, 0.9);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky; top: 0; z-index: 1000;
+            backdrop-filter: blur(12px);
+        }
+
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 2rem; color: var(--text-white);
+            cursor: pointer;
+        }
+        .logo span { color: var(--accent-gold); }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--accent-gold);
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex; list-style: none; gap: 1.2rem; align-items: center;
+        }
+
+        .nav-links a {
+            font-size: 0.9rem; transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover, .nav-links a.active-link { color: var(--accent-gold); }
+
+        .nav-btn {
+            border: 1px solid var(--accent-gold);
+            padding: 0.5rem 1.2rem; border-radius: 20px;
+            background: rgba(224, 169, 109, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: var(--accent-gold);
+            color: #0f0d0e;
+        }
+
+        /* NAVIGATION MECHANISM */
+        .page-content {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out forwards;
+        }
+
+        .page-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container {
+            width: 90%; max-width: 1200px;
+            margin: 0 auto; padding: 3rem 0;
+        }
+
+        .text-center { text-align: center; }
+
+        .tagline {
+            color: var(--accent-gold); letter-spacing: 2px;
+            font-size: 0.85rem; text-transform: uppercase;
+            font-weight: 600; display: block; margin-bottom: 0.5rem;
+        }
+
+        /* GRID LAYOUTS */
+        .grid { display: grid; gap: 2rem; }
+        .grid-2 { grid-template-columns: repeat(2, 1fr); }
+        .grid-3 { grid-template-columns: repeat(3, 1fr); }
+        .grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+        /* CARD COMPONENT */
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            padding: 2rem; 
+            border: 1px solid var(--border-color);
+            border-radius: 12px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .card:hover { 
+            border-color: var(--accent-gold); 
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(224, 169, 109, 0.15);
+        }
+
+        .card i { transition: transform 0.3s ease; }
+        .card:hover i { transform: scale(1.15) rotate(5deg); }
+
+        .badge {
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            background: var(--accent-gold);
+            color: #0f0d0e;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .btn {
+            display: inline-block; padding: 0.8rem 2rem;
+            border-radius: 25px; font-weight: 600;
+            cursor: pointer; border: none; text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary { 
+            background-color: var(--accent-gold); 
+            color: #0f0d0e; 
+            box-shadow: 0 4px 15px rgba(224, 169, 109, 0.3);
+        }
+        .btn-primary:hover {
+            background-color: var(--accent-gold-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary { 
+            border: 1px solid var(--text-white); 
+            color: var(--text-white); 
+            margin-left: 0.5rem; 
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        #hero-banner {
+            background: linear-gradient(rgba(15, 13, 14, 0.75), rgba(15, 13, 14, 0.85)), 
+                        url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+            padding: 6rem 1rem; border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+        .form-group { display: flex; flex-direction: column; margin-bottom: 0.8rem; text-align: left; }
+        .form-group.full-width { grid-column: span 2; }
+
+        .form-group label {
+            font-size: 0.85rem; margin-bottom: 0.4rem;
+            color: var(--text-white); display: flex; align-items: center; gap: 0.4rem;
+        }
+
+        input, select, textarea {
+            width: 100%; padding: 0.75rem; 
+            background-color: rgba(15, 13, 14, 0.8);
+            border: 1px solid var(--border-color); 
+            color: var(--text-white);
+            border-radius: 8px; outline: none; font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus { 
+            border-color: var(--accent-gold); 
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator,
+        input[type="time"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+        }
+
+        /* Gallery Features */
+        .ba-box {
+            position: relative; overflow: hidden;
+            border-radius: 10px; border: 1px solid var(--border-color);
+        }
+        .ba-box img { width: 100%; height: 220px; object-fit: cover; display: block; }
+        .ba-tag {
+            position: absolute; bottom: 10px; left: 10px;
+            background: rgba(15, 13, 14, 0.8);
+            padding: 3px 10px; font-size: 0.75rem; border-radius: 5px;
+            border: 1px solid var(--accent-gold);
+        }
+
+        .insta-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+        .insta-item { position: relative; overflow: hidden; border-radius: 8px; height: 180px; }
+        .insta-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+        .insta-item:hover img { transform: scale(1.1); }
+        .insta-overlay {
+            position: absolute; inset: 0; background: rgba(0,0,0,0.6);
+            display: flex; justify-content: center; align-items: center; gap: 1rem;
+            opacity: 0; transition: opacity 0.3s; color: var(--accent-gold);
+        }
+        .insta-item:hover .insta-overlay { opacity: 1; }
+
+        details {
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            margin-bottom: 1rem; border-radius: 8px; padding: 1rem;
+            cursor: pointer; text-align: left;
+        }
+        summary { font-weight: 600; color: var(--accent-gold); outline: none; }
+        details p { margin-top: 0.8rem; color: var(--text-muted); font-size: 0.9rem; }
+
+        .calc-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.8rem 0; border-bottom: 1px dashed var(--border-color);
+        }
+        .calc-item label { cursor: pointer; display: flex; align-items: center; gap: 0.5rem; }
+
+        .booking-success {
+            display: none;
+            background: rgba(224, 169, 109, 0.15);
+            border: 1px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center; padding: 2.5rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: auto; color: var(--text-muted); font-size: 0.85rem;
+            background: rgba(15, 13, 14, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3, .grid-4, .form-grid, .insta-grid { grid-template-columns: 1fr; }
+            .form-group.full-width { grid-column: span 1; }
+            
+            .menu-toggle { display: block; }
+            
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                padding: 1rem 0;
+                gap: 1rem;
+            }
+            
+            .nav-links.show {
+                display: flex;
+            }
+
+            header.navbar { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="logo" onclick="showPage('page-home')">LUXE <span>Salon</span></div>
+        <div class="menu-toggle" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></div>
+        <ul class="nav-links" id="nav-links">
+            <li><a onclick="showPage('page-home')" class="active-link">Home</a></li>
+            <li><a onclick="showPage('page-about')">About</a></li>
+            <li><a onclick="showPage('page-services')">Services</a></li>
+            <li><a onclick="showPage('page-gallery')">Gallery</a></li>
+            <li><a onclick="showPage('page-vip')">VIP Club</a></li>
+            <li><a onclick="showPage('page-calc')">Calculator</a></li>
+            <li><a onclick="showPage('page-faq')">FAQ</a></li>
+            <li><a onclick="showPage('page-booking')" class="nav-btn">Booking</a></li>
+        </ul>
+    </header>
+
+    <main>
+        <!-- PAGE 1: HOME PAGE -->
+        <section id="page-home" class="page-content active">
+            <div class="container">
+                <div id="hero-banner" class="text-center">
+                    <span class="tagline">Luxury Beauty Lounge</span>
+                    <h1 style="font-size:2.8rem; margin-bottom:15px;">
+                        Experience Luxury, Beauty & Confidence 🤍
+                    </h1>
+                    <p style="max-width:700px; margin:auto; color: var(--text-muted);">
+                        💎 Luxury Beauty, Perfected with premium treatments and organic products. ✨
+                    </p>
+                    <div style="margin-top:25px;">
+                        <a onclick="showPage('page-booking')" class="btn btn-primary">Book Appointment</a>
+                        <a onclick="showPage('page-services')" class="btn btn-secondary">View Services</a>
+                    </div>
+                </div>
+
+                <div class="grid grid-3" style="margin-top:3rem;">
+                    <article class="card">
+                        <i class="fa-solid fa-gem" style="font-size:2rem; color:var(--accent-gold); margin-bottom: 1rem;"></i>
+                        <h3>Organic Products</h3>
+                        <p style="color: var(--text-muted); margin-top: 0.5rem;">100% cruelty-free & safe for sensitive skin.</p>
+                    </article>
+                    <article class="card">
+                        <i class="fa-solid fa-award" style="font-size:2rem; color:var(--accent-gold); margin-bottom: 1rem;"></i>
+                        <h3>Expert Artists</h3>
+                        <p style="color: var(--text-muted); margin-top: 0.5rem;">Award-winning stylists and beauticians.</p>
+                    </article>
+                    <article class="card">
+                        <i class="fa-solid fa-spa" style="font-size:2rem; color:var(--accent-gold); margin-bottom: 1rem;"></i>
+                        <h3>Private Spa</h3>
+                        <p style="color: var(--text-muted); margin-top: 0.5rem;">Tranquil relaxing space designed for care.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 2: ABOUT US -->
+        <section id="page-about" class="page-content">
+            <div class="container">
+                <div class="grid grid-2">
+                    <article>
+                        <span class="tagline">Our Journey</span>
+                        <h2 style="font-size: 2.2rem; margin: 0.5rem 0 1rem 0;">✨ Creating Beauty, Inspiring Confidence</h2>
+                        <p style="color: var(--text-muted);">
+                            At LUXE Beauty Lounge, we believe beauty is about confidence and self-care. Founded with a passion for excellence, our lounge provides a peaceful sanctuary where science and elegance meet.
+                        </p>
+                    </article>
+                    <aside class="card text-center">
+                        <blockquote style="font-family: var(--font-heading); font-size: 1.2rem;">
+                            💖 "Every visit is a step towards a more confident you."
+                        </blockquote>
+                        <p style="margin-top: 1rem; color: var(--accent-gold);">— Team LUXE 🌸</p>
+                    </aside>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 3: SERVICES -->
+        <section id="page-services" class="page-content">
+            <div class="container text-center">
+                <span class="tagline">Signature Care</span>
+                <h2 style="margin-bottom: 2rem;">Popular Treatments</h2>
+                <div class="grid grid-3">
+                    <article class="card">
+                        <i class="fa-solid fa-spa" style="font-size: 2rem; color: var(--accent-gold); margin-bottom: 1rem;"></i>
+                        <h3>Skin Glow Facial 🧖‍♀️</h3>
+                        <p style="color: var(--text-muted); margin-top: 0.8rem;">Radiance hydration treatment for all skin types.</p>
+                    </article>
+                    <article class="card">
+                        <i class="fa-solid fa-scissors" style="font-size: 2rem; color: var(--accent-gold); margin-bottom: 1rem;"></i>
+                        <h3>Hair Design & Color 💇‍♀️</h3>
+                        <p style="color: var(--text-muted); margin-top: 0.8rem;">Trending styling, Balayage & Keratin care.</p>
+                    </article>
+                    <article class="card">
+                        <i class="fa-solid fa-hand-sparkles" style="font-size: 2rem; color: var(--accent-gold); margin-bottom: 1rem;"></i>
+                        <h3>Luxury Spa 👑</h3>
+                        <p style="color: var(--text-muted); margin-top: 0.8rem;">Full body deep massage & detox treatments.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 4: GALLERY -->
+        <section id="page-gallery" class="page-content">
+            <div class="container">
+                <div class="text-center" style="margin-bottom: 2rem;">
+                    <span class="tagline">Real Transformations</span>
+                    <h2>Before & After Results</h2>
+                </div>
+
+                <div class="grid grid-2" style="margin-bottom: 3rem;">
+                    <div class="card">
+                        <h3 style="margin-bottom: 1rem;">Hair Color Transformation</h3>
+                        <div class="grid grid-2">
+                            <div class="ba-box">
+                                <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=400&q=80" alt="Hair Color Before">
+                                <span class="ba-tag">BEFORE</span>
+                            </div>
+                            <div class="ba-box">
+                                <img src="https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&w=400&q=80" alt="Hair Color After">
+                                <span class="ba-tag">AFTER</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3 style="margin-bottom: 1rem;">Skin Glow Therapy</h3>
+                        <div class="grid grid-2">
+                            <div class="ba-box">
+                                <img src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&w=400&q=80" alt="Skin Glow Before">
+                                <span class="ba-tag">BEFORE</span>
+                            </div>
+                            <div class="ba-box">
+                                <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=400&q=80" alt="Skin Glow After">
+                                <span class="ba-tag">AFTER</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center" style="margin-bottom: 1.5rem;">
+                    <span class="tagline">@LuxeBeautyLounge</span>
+                    <h3>Follow Our Instagram Feed</h3>
+                </div>
+
+                <div class="insta-grid">
+                    <div class="insta-item">
+                        <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=400&q=80" alt="Instagram Post 1">
+                        <div class="insta-overlay">
+                            <i class="fa-solid fa-heart"> 1.2k</i> 
+                            <i class="fa-solid fa-comment"> 45</i>
+                        </div>
+                    </div>
+                    <div class="insta-item">
+                        <img src="https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=400&q=80" alt="Instagram Post 2">
+                        <div class="insta-overlay">
+                            <i class="fa-solid fa-heart"> 980</i> 
+                            <i class="fa-solid fa-comment"> 23</i>
+                        </div>
+                    </div>
+                    <div class="insta-item">
+                        <img src="https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?auto=format&fit=crop&w=400&q=80" alt="Instagram Post 3">
+                        <div class="insta-overlay">
+                            <i class="fa-solid fa-heart"> 2.1k</i> 
+                            <i class="fa-solid fa-comment"> 89</i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 5: VIP MEMBERSHIP -->
+        <section id="page-vip" class="page-content">
+            <div class="container text-center">
+                <span class="tagline">Exclusive Perks</span>
+                <h2 style="margin-bottom: 2rem;">VIP Club Membership</h2>
+                <div class="grid grid-3">
+                    <article class="card">
+                        <span class="badge">Silver</span>
+                        <h3 style="color: var(--accent-gold);">Gold Member</h3>
+                        <h2 style="margin: 1rem 0;">₹2,999 <small>/yr</small></h2>
+                        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">10% Off on all services + Free Hair Spa twice a year.</p>
+                        <a onclick="showPage('page-booking')" class="btn btn-secondary">Join Club</a>
+                    </article>
+
+                    <article class="card" style="border-color: var(--accent-gold);">
+                        <span class="badge">Most Popular</span>
+                        <h3 style="color: var(--accent-gold);">Platinum</h3>
+                        <h2 style="margin: 1rem 0;">₹5,999 <small>/yr</small></h2>
+                        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">20% Off on all services + Priority Slots + 4 Complimentary Facials.</p>
+                        <a onclick="showPage('page-booking')" class="btn btn-primary">Join Club</a>
+                    </article>
+
+                    <article class="card">
+                        <span class="badge">Luxury</span>
+                        <h3 style="color: var(--accent-gold);">Diamond Elite</h3>
+                        <h2 style="margin: 1rem 0;">₹9,999 <small>/yr</small></h2>
+                        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">30% Off on all services + Unlimited Hydra Facials + At-Home Service.</p>
+                        <a onclick="showPage('page-booking')" class="btn btn-secondary">Join Club</a>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 6: PRICE CALCULATOR -->
+        <section id="page-calc" class="page-content">
+            <div class="container" style="max-width: 600px;">
+                <div class="card">
+                    <div class="text-center" style="margin-bottom: 1.5rem;">
+                        <span class="tagline">Estimate Cost</span>
+                        <h2>Service Cost Calculator</h2>
+                    </div>
+                    <div>
+                        <div class="calc-item">
+                            <label><input type="checkbox" class="service-check" data-price="500"> Haircut & Styling</label>
+                            <span>₹500</span>
+                        </div>
+                        <div class="calc-item">
+                            <label><input type="checkbox" class="service-check" data-price="1200"> Herbal Facial</label>
+                            <span>₹1,200</span>
+                        </div>
+                        <div class="calc-item">
+                            <label><input type="checkbox" class="service-check" data-price="2500"> Keratin Treatment</label>
+                            <span>₹2,500</span>
+                        </div>
+                        <div class="calc-item">
+                            <label><input type="checkbox" class="service-check" data-price="1800"> Full Body Spa</label>
+                            <span>₹1,800</span>
+                        </div>
+
+                        <div style="margin-top: 1.5rem; text-align: right; font-size: 1.1rem;">
+                            Subtotal: <span id="sub-price" style="color: var(--text-white);">₹0</span><br>
+                            <small style="color: var(--text-muted);">Taxes & GST (18%): <span id="tax-price">₹0</span></small>
+                            <hr style="border-color: var(--border-color); margin: 0.5rem 0;">
+                            <strong>Total Amount: <span id="total-price" style="color: var(--accent-gold); font-size: 1.3rem;">₹0</span></strong>
+                        </div>
+
+                        <div class="text-center" style="margin-top: 1.5rem;">
+                            <a onclick="showPage('page-booking')" class="btn btn-primary">Proceed to Book</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 7: FAQ -->
+        <section id="page-faq" class="page-content">
+            <div class="container" style="max-width: 800px;">
+                <div class="text-center" style="margin-bottom: 2rem;">
+                    <span class="tagline">Got Questions?</span>
+                    <h2>Frequently Asked Questions</h2>
+                </div>
+                <details>
+                    <summary>Do I need to book an appointment in advance?</summary>
+                    <p>Yes, we recommend booking in advance to ensure slot availability with your preferred beautician.</p>
+                </details>
+                <details>
+                    <summary>Are your products organic and safe for sensitive skin?</summary>
+                    <p>Absolutely! We use 100% cruelty-free, dermatologically tested, organic products for skin and hair.</p>
+                </details>
+                <details>
+                    <summary>What is your cancellation policy?</summary>
+                    <p>You can cancel or reschedule your appointment up to 2 hours before your scheduled time slot free of charge.</p>
+                </details>
+            </div>
+        </section>
+
+        <!-- PAGE 8: BOOKING FORM -->
+        <section id="page-booking" class="page-content">
+            <div class="container" style="max-width: 800px;">
+                <div class="card">
+                    <div class="text-center" style="margin-bottom: 2rem;">
+                        <span class="tagline">Reserve Your Slot</span>
+                        <h2>Client Registration & Appointment</h2>
+                    </div>
+
+                    <form id="booking-form" onsubmit="handleBooking(event)" class="form-grid">
+                        
+                        <div class="form-group">
+                            <label for="first-name"><i class="fa-solid fa-user"></i> First Name</label>
+                            <input type="text" id="first-name" placeholder="John" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="last-name"><i class="fa-solid fa-user"></i> Last Name</label>
+                            <input type="text" id="last-name" placeholder="Doe" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email"><i class="fa-solid fa-envelope"></i> Email Address</label>
+                            <input type="email" id="email" placeholder="john@example.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone"><i class="fa-solid fa-phone"></i> Phone Number</label>
+                            <input type="tel" id="phone" placeholder="+91 9876543210" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="gender"><i class="fa-solid fa-venus-mars"></i> Gender</label>
+                            <select id="gender" name="gender">
+                                <option value="">Select Gender</option>
+                                <option>Male</option>
+                                <option>Female</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="age"><i class="fa-solid fa-user-clock"></i> Age</label>
+                            <input type="number" id="age" min="10" max="100" placeholder="Enter Age">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="booking-date"><i class="fa-solid fa-calendar-days"></i> Preferred Date</label>
+                            <input type="date" id="booking-date" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="booking-time"><i class="fa-solid fa-clock"></i> Preferred Time Slot</label>
+                            <input type="time" id="booking-time" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="service-category"><i class="fa-solid fa-list"></i> Service Category</label>
+                            <select id="service-category" required>
+                                <option value="">Select Category</option>
+                                <option>Hair Styling & Care</option>
+                                <option>Skin Treatments & Facial</option>
+                                <option>Luxury Body Spa</option>
+                                <option>Bridal & Party Makeup</option>
+                                <option>Nail Art & Pedicure</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contact-pref"><i class="fa-solid fa-comments"></i> Preferred Contact Method</label>
+                            <select id="contact-pref">
+                                <option>WhatsApp Message</option>
+                                <option>Direct Phone Call</option>
+                                <option>Email Confirmation</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="referral"><i class="fa-solid fa-bullhorn"></i> How Did You Hear About Us?</label>
+                            <select id="referral">
+                                <option value="">Choose Option</option>
+                                <option>Instagram / Facebook</option>
+                                <option>Friend or Family Recommendation</option>
+                                <option>Google Search</option>
+                                <option>Passed by Salon Location</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="request"><i class="fa-solid fa-comment-dots"></i> Special Requests or Notes</label>
+                            <textarea id="request" rows="3" placeholder="Any specific instructions or allergies..."></textarea>
+                        </div>
+
+                        <div class="form-group full-width text-center" style="margin-top: 1rem;">
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Confirm & Book Appointment</button>
+                        </div>
+                    </form>
+
+                    <div id="booking-success" class="booking-success">
+                        <i class="fa-solid fa-circle-check" style="font-size: 2.5rem; color: var(--accent-gold); margin-bottom: 0.5rem;"></i>
+                        <h3>Appointment Booked Successfully!</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">
+                            Thank you! Our team will get in touch with you shortly via your preferred contact method to confirm your slot.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 LUXE Beauty Salon & Spa Lounge. All Rights Reserved.</p>
+    </footer>
+
+    <!-- JAVASCRIPT FOR NAVIGATION, CALCULATOR & FORM -->
+    <script>
+        // Page Navigation Function
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page-content');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            const selectedPage = document.getElementById(pageId);
+            if (selectedPage) {
+                selectedPage.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // Highlight Active Link
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => {
+                link.classList.remove('active-link');
+                if (link.getAttribute('onclick').includes(pageId)) {
+                    link.classList.add('active-link');
+                }
+            });
+
+            // Close Mobile Menu on Selection
+            document.getElementById('nav-links').classList.remove('show');
+        }
+
+        // Toggle Mobile Menu
+        function toggleMenu() {
+            const navLinks = document.getElementById('nav-links');
+            navLinks.classList.toggle('show');
+        }
+
+        // Price Calculator Functionality
+        const checkboxes = document.querySelectorAll('.service-check');
+        const subPriceEl = document.getElementById('sub-price');
+        const taxPriceEl = document.getElementById('tax-price');
+        const totalPriceEl = document.getElementById('total-price');
+
+        checkboxes.forEach(box => {
+            box.addEventListener('change', () => {
+                let subtotal = 0;
+                checkboxes.forEach(c => {
+                    if (c.checked) {
+                        subtotal += parseInt(c.getAttribute('data-price'));
+                    }
+                });
+                
+                let tax = Math.round(subtotal * 0.18);
+                let total = subtotal + tax;
+
+                subPriceEl.textContent = '₹' + subtotal.toLocaleString('en-IN');
+                taxPriceEl.textContent = '₹' + tax.toLocaleString('en-IN');
+                totalPriceEl.textContent = '₹' + total.toLocaleString('en-IN');
+            });
+        });
+
+        // Booking Form Submission Handler
+        function handleBooking(event) {
+            event.preventDefault();
+            document.getElementById('booking-form').style.display = 'none';
+            document.getElementById('booking-success').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
